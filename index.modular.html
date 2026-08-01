@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <meta name="description" content="Mascott Chess is a responsive player-vs-computer chess PWA with legal move highlighting and tight Elo-based computer levels." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Mascott Chess PWA</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Player vs Computer</p>
+          <h1>Mascott Chess</h1>
+        </div>
+        <div class="top-actions">
+          <a class="ghost-button" href="tutorial.html">Tutorial</a>
+          <span id="offlineBadge" class="badge" hidden>Offline ready</span>
+          <button id="installBtn" class="ghost-button" type="button" hidden>Install app</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="board-panel" aria-label="Chess board panel">
+          <div class="controls" aria-label="Game controls">
+            <label>
+              <span>Computer ELO</span>
+              <select id="difficultySelect">
+                <option value="1200" selected>1200 ELO — Developing</option>
+              </select>
+            </label>
+            <label>
+              <span>Play as</span>
+              <select id="sideSelect">
+                <option value="w" selected>White</option>
+                <option value="b">Black</option>
+              </select>
+            </label>
+            <button id="newGameBtn" class="primary-button" type="button">New game</button>
+          </div>
+
+          <div class="status-card" role="status" aria-live="polite">
+            <div class="status-main">
+              <span id="thinkingDot" class="thinking-dot" hidden></span>
+              <span id="statusText">Your move.</span>
+            </div>
+            <p id="statusSubtext">Tap a piece to see every legal move.</p>
+          </div>
+
+          <div id="board" class="board" aria-label="Interactive chess board"></div>
+        </section>
+
+        <aside class="side-panel" aria-label="Game information">
+          <section class="info-card">
+            <h2>How to play</h2>
+            <ul class="tips">
+              <li>Tap or click any of your pieces to highlight legal moves.</li>
+              <li>Dots are quiet moves; rings are captures.</li>
+              <li>The computer replies automatically and the last move stays highlighted.</li>
+              <li>Pick a tight 50-point Elo step from 400 to 2400.</li>
+              <li>All normal chess rules are included: check, castling, en passant, and promotion.</li>
+            </ul>
+          </section>
+
+          <section class="info-card compact">
+            <div class="card-header">
+              <h2>Position</h2>
+              <button id="copyFenBtn" class="tiny-button" type="button">Copy FEN</button>
+            </div>
+            <p id="fenText" class="fen-text"></p>
+          </section>
+
+          <section class="info-card move-history-card">
+            <div class="card-header">
+              <h2>Moves</h2>
+              <button id="clearHistoryBtn" class="tiny-button" type="button">Clear view</button>
+            </div>
+            <ol id="moveList" class="move-list" aria-label="Move history"></ol>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <div id="promotionModal" class="promotion-modal" hidden>
+      <div class="promotion-card" role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+        <h2 id="promotionTitle">Choose promotion</h2>
+        <p>Pick the piece your pawn should become.</p>
+        <div id="promotionChoices" class="promotion-choices"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="js/chess-engine.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

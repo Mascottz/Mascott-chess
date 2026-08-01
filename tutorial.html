@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <meta name="description" content="A pure beginner tutorial for Mascott Chess: learn the board, each piece, legal moves, captures, check, and how to use the app." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Beginner Tutorial | Mascott Chess</title>
+  </head>
+  <body>
+    <div class="app-shell tutorial-shell beginner-tutorial">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Pure Beginner Tutorial</p>
+          <h1>Mascott Chess</h1>
+        </div>
+        <div class="top-actions">
+          <a class="ghost-button" href="index.html">Back to game</a>
+        </div>
+      </header>
+
+      <main class="tutorial-layout">
+        <section class="info-card tutorial-hero beginner-hero">
+          <h2>Never played chess before? Start here.</h2>
+          <p>
+            This guide teaches the goal of chess, what every piece does, and how to make moves inside Mascott Chess.
+            You do not need to know any chess words before reading this page.
+          </p>
+          <div class="beginner-actions">
+            <a class="primary-button lesson-link" href="#pieces">Learn the pieces</a>
+            <a class="ghost-button lesson-link" href="#playing-app">How to use the app</a>
+          </div>
+        </section>
+
+        <section class="info-card tutorial-wide" id="goal">
+          <h2>1. The goal of chess</h2>
+          <p>
+            Each player has a king. Your goal is to trap the computer's king so it is attacked and has no safe move.
+            That is called <strong>checkmate</strong>. You do not actually remove the king from the board.
+          </p>
+          <div class="simple-rule-grid">
+            <div><strong>White moves first.</strong><p>Then players take turns: you move, computer moves, you move, and so on.</p></div>
+            <div><strong>One move per turn.</strong><p>Move one piece on your turn, except for one special king move called castling.</p></div>
+            <div><strong>You capture enemies.</strong><p>If your piece moves to a square with a computer piece, that computer piece is removed.</p></div>
+          </div>
+        </section>
+
+        <section class="info-card tutorial-wide" id="board-basics">
+          <h2>2. Board basics</h2>
+          <p>
+            The chess board has 64 squares: 8 across and 8 down. Light and dark squares alternate.
+            In Mascott Chess, your pieces are always shown at the bottom of the board.
+          </p>
+          <ul class="tips beginner-list">
+            <li><strong>Files</strong> are the letters a to h across the board.</li>
+            <li><strong>Ranks</strong> are the numbers 1 to 8 up the board.</li>
+            <li>A square name combines both, such as <strong>e4</strong> or <strong>a1</strong>.</li>
+            <li>Pieces cannot usually jump over other pieces. The knight is the important exception.</li>
+          </ul>
+        </section>
+
+        <section class="info-card tutorial-wide" id="playing-app">
+          <h2>3. How to move in Mascott Chess</h2>
+          <div class="steps-strip">
+            <div><span>1</span><strong>Tap your piece</strong><p>The app highlights every legal square that piece can move to.</p></div>
+            <div><span>2</span><strong>Choose a highlighted square</strong><p>A dot means an empty square. A ring means a capture.</p></div>
+            <div><span>3</span><strong>Wait for the computer</strong><p>The computer thinks and makes a legal reply based on the Elo level.</p></div>
+          </div>
+        </section>
+
+        <section class="info-card tutorial-wide" id="pieces">
+          <h2>4. How every piece moves</h2>
+          <p>
+            In the diagrams below, the white piece is in the center area. Blue dots show normal moves.
+            Rings show capture directions. Real games may show fewer moves if another piece blocks the path.
+          </p>
+        </section>
+
+        <section class="piece-lessons">
+          <article class="info-card piece-lesson" id="pawn">
+            <div>
+              <span class="piece-title-symbol">♙</span>
+              <h2>Pawn</h2>
+              <p>
+                Pawns are small but important. A white pawn moves forward toward the top of your screen.
+                A black pawn moves the opposite way.
+              </p>
+              <ul class="tips beginner-list">
+                <li>Moves forward <strong>one square</strong> if the square is empty.</li>
+                <li>From its starting square, it may move <strong>two squares</strong> forward if both squares are empty.</li>
+                <li>Captures <strong>one square diagonally forward</strong>, not straight ahead.</li>
+                <li>If a pawn reaches the far end, it promotes into a queen, rook, bishop, or knight.</li>
+              </ul>
+            </div>
+            <div class="diagram-card" aria-label="Pawn movement diagram">
+              <div class="diagram-board" role="img" aria-label="Pawn movement pattern">
+                <span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark capture"><span class="diagram-ring" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark capture"><span class="diagram-ring" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark piece"><span class="diagram-piece">♙</span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span>
+              </div>
+              <div class="diagram-legend"><span><i class="legend-piece">♙</i> piece</span><span><i class="legend-dot"></i> move</span><span><i class="legend-ring"></i> capture</span></div>
+            </div>
+          </article>
+
+          <article class="info-card piece-lesson" id="rook">
+            <div>
+              <span class="piece-title-symbol">♖</span>
+              <h2>Rook</h2>
+              <p>The rook moves in straight lines.</p>
+              <ul class="tips beginner-list">
+                <li>Moves any number of squares left, right, up, or down.</li>
+                <li>Cannot move diagonally.</li>
+                <li>Cannot jump over pieces.</li>
+              </ul>
+            </div>
+            <div class="diagram-card" aria-label="Rook movement diagram">
+              <div class="diagram-board" role="img" aria-label="Rook movement pattern">
+                <span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light piece"><span class="diagram-piece">♖</span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span>
+              </div>
+              <div class="diagram-legend"><span><i class="legend-piece">♖</i> piece</span><span><i class="legend-dot"></i> move</span><span><i class="legend-ring"></i> capture</span></div>
+            </div>
+          </article>
+
+          <article class="info-card piece-lesson" id="bishop">
+            <div>
+              <span class="piece-title-symbol">♗</span>
+              <h2>Bishop</h2>
+              <p>The bishop moves diagonally.</p>
+              <ul class="tips beginner-list">
+                <li>Moves any number of squares diagonally.</li>
+                <li>A bishop always stays on the same color square it started on.</li>
+                <li>Cannot jump over pieces.</li>
+              </ul>
+            </div>
+            <div class="diagram-card" aria-label="Bishop movement diagram">
+              <div class="diagram-board" role="img" aria-label="Bishop movement pattern">
+                <span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light piece"><span class="diagram-piece">♗</span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span>
+              </div>
+              <div class="diagram-legend"><span><i class="legend-piece">♗</i> piece</span><span><i class="legend-dot"></i> move</span><span><i class="legend-ring"></i> capture</span></div>
+            </div>
+          </article>
+
+          <article class="info-card piece-lesson" id="queen">
+            <div>
+              <span class="piece-title-symbol">♕</span>
+              <h2>Queen</h2>
+              <p>The queen is the most powerful piece because it combines rook and bishop movement.</p>
+              <ul class="tips beginner-list">
+                <li>Moves any number of squares in a straight line or diagonal.</li>
+                <li>Cannot move like a knight.</li>
+                <li>Cannot jump over pieces.</li>
+              </ul>
+            </div>
+            <div class="diagram-card" aria-label="Queen movement diagram">
+              <div class="diagram-board" role="img" aria-label="Queen movement pattern">
+                <span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light piece"><span class="diagram-piece">♕</span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span>
+              </div>
+              <div class="diagram-legend"><span><i class="legend-piece">♕</i> piece</span><span><i class="legend-dot"></i> move</span><span><i class="legend-ring"></i> capture</span></div>
+            </div>
+          </article>
+
+          <article class="info-card piece-lesson" id="knight">
+            <div>
+              <span class="piece-title-symbol">♘</span>
+              <h2>Knight</h2>
+              <p>The knight has the strangest move, but it is easy to remember as an L-shape.</p>
+              <ul class="tips beginner-list">
+                <li>Moves two squares in one direction, then one square sideways.</li>
+                <li>Or one square in one direction, then two squares sideways.</li>
+                <li>The knight <strong>can jump over other pieces</strong>.</li>
+              </ul>
+            </div>
+            <div class="diagram-card" aria-label="Knight movement diagram">
+              <div class="diagram-board" role="img" aria-label="Knight movement pattern">
+                <span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light piece"><span class="diagram-piece">♘</span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span>
+              </div>
+              <div class="diagram-legend"><span><i class="legend-piece">♘</i> piece</span><span><i class="legend-dot"></i> move</span><span><i class="legend-ring"></i> capture</span></div>
+            </div>
+          </article>
+
+          <article class="info-card piece-lesson" id="king">
+            <div>
+              <span class="piece-title-symbol">♔</span>
+              <h2>King</h2>
+              <p>Your king is the piece you must protect.</p>
+              <ul class="tips beginner-list">
+                <li>Moves one square in any direction.</li>
+                <li>Cannot move onto a square attacked by the computer.</li>
+                <li>If your king is attacked, you are in <strong>check</strong> and must fix it immediately.</li>
+              </ul>
+            </div>
+            <div class="diagram-card" aria-label="King movement diagram">
+              <div class="diagram-board" role="img" aria-label="King movement pattern">
+                <span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light piece"><span class="diagram-piece">♔</span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square light move"><span class="diagram-dot" aria-hidden="true"></span></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span><span class="diagram-square dark"></span><span class="diagram-square light"></span>
+              </div>
+              <div class="diagram-legend"><span><i class="legend-piece">♔</i> piece</span><span><i class="legend-dot"></i> move</span><span><i class="legend-ring"></i> capture</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="lesson-grid beginner-rule-grid">
+          <article class="info-card lesson-card">
+            <span class="lesson-number">5</span>
+            <h2>Check</h2>
+            <p>
+              Check means your king is under attack. In Mascott Chess, a checked king is highlighted red.
+              On your next move, you must make the king safe.
+            </p>
+            <ul class="tips beginner-list">
+              <li>Move the king away.</li>
+              <li>Capture the attacking piece.</li>
+              <li>Block the attack with another piece, if possible.</li>
+            </ul>
+          </article>
+
+          <article class="info-card lesson-card">
+            <span class="lesson-number">6</span>
+            <h2>Checkmate</h2>
+            <p>
+              Checkmate means the king is in check and there is no legal way to escape. The game ends immediately.
+            </p>
+            <p class="beginner-note">Beginner idea: before every move, ask “Is my king safe after this?”</p>
+          </article>
+
+          <article class="info-card lesson-card">
+            <span class="lesson-number">7</span>
+            <h2>Stalemate</h2>
+            <p>
+              Stalemate is a draw. It happens when the player to move is <strong>not</strong> in check but has no legal move.
+            </p>
+            <p class="beginner-note">This often happens when one side has only a king left.</p>
+          </article>
+
+          <article class="info-card lesson-card">
+            <span class="lesson-number">8</span>
+            <h2>Special moves</h2>
+            <ul class="tips beginner-list">
+              <li><strong>Promotion:</strong> a pawn reaching the far end becomes a stronger piece.</li>
+              <li><strong>Castling:</strong> a king-and-rook safety move. The app shows it only when legal.</li>
+              <li><strong>En passant:</strong> a rare pawn capture. The app shows it only right after it becomes legal.</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="info-card tutorial-wide" id="first-game-plan">
+          <h2>9. A simple first-game plan</h2>
+          <div class="training-steps">
+            <div>
+              <strong>Control the center</strong>
+              <p>Try moving a center pawn first, like the pawn in front of your king or queen.</p>
+            </div>
+            <div>
+              <strong>Bring pieces out</strong>
+              <p>Move knights and bishops toward the center before moving the same piece many times.</p>
+            </div>
+            <div>
+              <strong>Protect your king</strong>
+              <p>If the app says you are in check, look only for moves that make your king safe.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="info-card tutorial-wide" id="elo-help">
+          <h2>10. What computer Elo should a beginner choose?</h2>
+          <p>
+            Start low. The goal is to learn what the pieces do, not to beat a strong engine immediately.
+          </p>
+          <div class="simple-rule-grid">
+            <div><strong>400–700 Elo</strong><p>Best for your first games.</p></div>
+            <div><strong>750–1000 Elo</strong><p>Good after you understand all pieces.</p></div>
+            <div><strong>1050+</strong><p>Use this when you want the computer to punish more mistakes.</p></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
