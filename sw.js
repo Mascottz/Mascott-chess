@@ -1,4 +1,4 @@
-const CACHE_NAME = "mascott-chess-pwa-v5";
+const CACHE_NAME = "mascott-chess-pwa-v6";
 const APP_SHELL = [
   "./",
   "./index.html",

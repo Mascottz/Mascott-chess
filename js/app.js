@@ -83,6 +83,7 @@
   const els = {
     board: document.getElementById("board"),
     difficultySelect: document.getElementById("difficultySelect"),
+    timeControlSelect: document.getElementById("timeControlSelect"),
     sideSelect: document.getElementById("sideSelect"),
     newGameBtn: document.getElementById("newGameBtn"),
     statusText: document.getElementById("statusText"),
@@ -97,6 +98,19 @@
     toast: document.getElementById("toast"),
     installBtn: document.getElementById("installBtn"),
     offlineBadge: document.getElementById("offlineBadge"),
+
+    // Player Clock Bars & Board Overlay
+    topPlayerName: document.getElementById("topPlayerName"),
+    bottomPlayerName: document.getElementById("bottomPlayerName"),
+    topClock: document.getElementById("topClock"),
+    bottomClock: document.getElementById("bottomClock"),
+    boardOverlay: document.getElementById("boardOverlay"),
+    boardOverlayIcon: document.getElementById("boardOverlayIcon"),
+    boardOverlayTitle: document.getElementById("boardOverlayTitle"),
+    boardOverlayMessage: document.getElementById("boardOverlayMessage"),
+    closeBoardOverlayBtn: document.getElementById("closeBoardOverlayBtn"),
+    overlayNewGameBtn: document.getElementById("overlayNewGameBtn"),
+    overlayReviewBtn: document.getElementById("overlayReviewBtn"),
   };
 
   let state = E.createInitialState();
@@ -111,6 +125,14 @@
   let pendingPromotionMoves = [];
   let toastTimer = null;
   let deferredInstallPrompt = null;
+
+  // Timer state
+  let timeControlSeconds = 300;
+  let whiteTimeMs = 300000;
+  let blackTimeMs = 300000;
+  let timerInterval = null;
+  let lastTickTime = null;
+  let timerStarted = false;
 
   function colorText(color) {
     return color === "w" ? "White" : "Black";
@@ -144,6 +166,147 @@
         els.toast.hidden = true;
       }, 160);
     }, duration);
+  }
+
+  // --- Clock & Timer Functions ---
+  function initClocks() {
+    timeControlSeconds = els.timeControlSelect ? parseInt(els.timeControlSelect.value, 10) || 0 : 300;
+    whiteTimeMs = timeControlSeconds * 1000;
+    blackTimeMs = timeControlSeconds * 1000;
+    timerStarted = false;
+    stopTimer();
+    updateClockDisplays();
+  }
+
+  function startTimer() {
+    stopTimer();
+    if (timeControlSeconds <= 0 || gameOver) return;
+    lastTickTime = performance.now();
+    timerInterval = setInterval(tickTimer, 100);
+  }
+
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function tickTimer() {
+    if (gameOver || timeControlSeconds <= 0) {
+      stopTimer();
+      return;
+    }
+
+    const now = performance.now();
+    const delta = now - lastTickTime;
+    lastTickTime = now;
+
+    if (state.turn === "w") {
+      whiteTimeMs = Math.max(0, whiteTimeMs - delta);
+      if (whiteTimeMs === 0) {
+        handleTimeout("w");
+        return;
+      }
+    } else {
+      blackTimeMs = Math.max(0, blackTimeMs - delta);
+      if (blackTimeMs === 0) {
+        handleTimeout("b");
+        return;
+      }
+    }
+    updateClockDisplays();
+  }
+
+  function handleTimeout(flaggedColor) {
+    stopTimer();
+    gameOver = true;
+    const winner = E.opponent(flaggedColor);
+    const flaggedName = flaggedColor === playerColor ? "You" : "Computer";
+    const winnerName = winner === playerColor ? "You" : "Computer";
+    const winnerColorName = winner === "w" ? "White" : "Black";
+
+    renderBoard();
+    renderStatus();
+
+    showBoardOverlay({
+      icon: "⏱️",
+      title: "TIME OUT",
+      message: `${flaggedName} ran out of time! ${winnerColorName} (${winnerName}) wins on time.`,
+    });
+  }
+
+  function formatTime(ms) {
+    if (ms <= 0) return "0:00";
+    if (ms < 10000) {
+      const sec = Math.floor(ms / 1000);
+      const tenth = Math.floor((ms % 1000) / 100);
+      return `0:0${sec}.${tenth}`;
+    }
+    const totalSec = Math.floor(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  }
+
+  function updateClockDisplays() {
+    if (!els.topClock || !els.bottomClock) return;
+
+    const elo = Number.parseInt(normalizeEloLevel(difficulty), 10);
+
+    if (timeControlSeconds <= 0) {
+      els.topClock.textContent = "— : —";
+      els.bottomClock.textContent = "— : —";
+      els.topClock.className = "clock-display untimed";
+      els.bottomClock.className = "clock-display untimed";
+      if (els.topPlayerName) els.topPlayerName.textContent = `Computer (${elo} ELO)`;
+      if (els.bottomPlayerName) els.bottomPlayerName.textContent = "You";
+      return;
+    }
+
+    let topMs, bottomMs, topActive, bottomActive;
+    if (playerColor === "w") {
+      topMs = blackTimeMs;
+      bottomMs = whiteTimeMs;
+      topActive = state.turn === "b" && !gameOver;
+      bottomActive = state.turn === "w" && !gameOver;
+      if (els.topPlayerName) els.topPlayerName.textContent = `Computer (${elo} ELO)`;
+      if (els.bottomPlayerName) els.bottomPlayerName.textContent = "You";
+    } else {
+      topMs = whiteTimeMs;
+      bottomMs = blackTimeMs;
+      topActive = state.turn === "w" && !gameOver;
+      bottomActive = state.turn === "b" && !gameOver;
+      if (els.topPlayerName) els.topPlayerName.textContent = `Computer (${elo} ELO)`;
+      if (els.bottomPlayerName) els.bottomPlayerName.textContent = "You";
+    }
+
+    els.topClock.textContent = formatTime(topMs);
+    els.bottomClock.textContent = formatTime(bottomMs);
+
+    setClockClass(els.topClock, topMs, topActive);
+    setClockClass(els.bottomClock, bottomMs, bottomActive);
+  }
+
+  function setClockClass(element, ms, isActive) {
+    let cls = "clock-display";
+    if (isActive) cls += " active";
+    if (ms < 10000) cls += " danger";
+    else if (ms < 30000) cls += " warning";
+    element.className = cls;
+  }
+
+  // --- Board Overlay Functions ---
+  function showBoardOverlay({ icon, title, message }) {
+    if (!els.boardOverlay) return;
+    if (els.boardOverlayIcon) els.boardOverlayIcon.textContent = icon || "♚";
+    if (els.boardOverlayTitle) els.boardOverlayTitle.textContent = title || "GAME OVER";
+    if (els.boardOverlayMessage) els.boardOverlayMessage.textContent = message || "";
+    els.boardOverlay.hidden = false;
+  }
+
+  function hideBoardOverlay() {
+    if (els.boardOverlay) els.boardOverlay.hidden = true;
   }
 
   function clearSelection() {
@@ -250,9 +413,43 @@
 
     lastMove = { from: cloneSquare(move.from), to: cloneSquare(move.to) };
     clearSelection();
+
+    // Start timer on first move if applicable
+    if (timeControlSeconds > 0 && !timerStarted && !gameOver) {
+      timerStarted = true;
+      startTimer();
+    }
+
+    const status = E.gameStatus(state);
+    if (status.over) {
+      stopTimer();
+      gameOver = true;
+    }
+
     renderAll();
 
-    if (source === "player") {
+    if (status.over) {
+      if (status.reason === "checkmate") {
+        const isUserWinner = status.winner === playerColor;
+        showBoardOverlay({
+          icon: "♚",
+          title: "CHECKMATE",
+          message: isUserWinner ? "Victory! You checkmated the computer." : "The computer found checkmate.",
+        });
+      } else if (status.reason === "stalemate") {
+        showBoardOverlay({
+          icon: "🤝",
+          title: "STALEMATE",
+          message: "Game drawn by stalemate.",
+        });
+      } else {
+        showBoardOverlay({
+          icon: "🤝",
+          title: "DRAW",
+          message: "Game drawn by fifty-move rule.",
+        });
+      }
+    } else if (source === "player") {
       window.setTimeout(maybeComputerMove, 180);
     }
   }
@@ -269,7 +466,6 @@
     clearSelection();
     renderAll();
 
-    // Give the UI a beat to update before the synchronous search starts.
     window.setTimeout(() => {
       let move = null;
       const started = performance.now();
@@ -294,7 +490,8 @@
     renderBoard();
     renderStatus();
     renderHistory();
-    els.fenText.textContent = E.boardToFen(state);
+    updateClockDisplays();
+    if (els.fenText) els.fenText.textContent = E.boardToFen(state);
   }
 
   function renderBoard() {
@@ -307,6 +504,7 @@
 
     const whiteInCheck = E.isInCheck(state, "w");
     const blackInCheck = E.isInCheck(state, "b");
+    const status = E.gameStatus(state);
     const rows = playerColor === "w" ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
     const cols = playerColor === "w" ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
 
@@ -324,6 +522,7 @@
         const isSelected = selected && selected.r === r && selected.c === c;
         const isLast = lastMove && (isSameSquare(lastMove.from, { r, c }) || isSameSquare(lastMove.to, { r, c }));
         const checkedKing = piece && piece.type === "k" && ((piece.color === "w" && whiteInCheck) || (piece.color === "b" && blackInCheck));
+        const checkmatedKing = checkedKing && status.over && status.reason === "checkmate";
 
         button.type = "button";
         button.className = `square ${light ? "light" : "dark"}`;
@@ -335,6 +534,7 @@
         if (isCapture) button.classList.add("capture-target");
         if (isLast) button.classList.add("last-move");
         if (checkedKing) button.classList.add("king-check");
+        if (checkmatedKing) button.classList.add("king-checkmate");
         if (piece && piece.color === playerColor && state.turn === playerColor && !thinking && !gameOver) {
           button.classList.add("own-piece");
         }
@@ -374,11 +574,12 @@
 
   function renderStatus() {
     const status = E.gameStatus(state);
-    gameOver = status.over;
+    if (status.over) gameOver = true;
 
     els.thinkingDot.hidden = !thinking;
     els.newGameBtn.disabled = thinking;
     els.sideSelect.disabled = thinking;
+    if (els.timeControlSelect) els.timeControlSelect.disabled = thinking;
 
     let main = "";
     const levelText = formatLevel(difficulty);
@@ -446,6 +647,8 @@
     gameOver = false;
     pendingPromotionMoves = [];
     els.promotionModal.hidden = true;
+    hideBoardOverlay();
+    initClocks();
     renderAll();
     window.setTimeout(maybeComputerMove, 220);
   }
@@ -515,8 +718,16 @@
       difficulty = normalizeEloLevel(els.difficultySelect.value);
       els.difficultySelect.value = difficulty;
       renderStatus();
+      updateClockDisplays();
       showToast(`Computer level set to ${formatLevel(difficulty)}.`);
     });
+
+    if (els.timeControlSelect) {
+      els.timeControlSelect.addEventListener("change", () => {
+        newGame();
+        showToast("Timer updated.");
+      });
+    }
 
     els.sideSelect.addEventListener("change", () => {
       newGame();
@@ -528,7 +739,7 @@
       showToast("New game started.");
     });
 
-    els.copyFenBtn.addEventListener("click", copyFen);
+    if (els.copyFenBtn) els.copyFenBtn.addEventListener("click", copyFen);
     els.clearHistoryBtn.addEventListener("click", () => {
       moveHistory = [];
       renderHistory();
@@ -543,10 +754,18 @@
       hidePromotionPicker();
       if (move) executeMove(move, "player");
     });
+
+    els.closeBoardOverlayBtn?.addEventListener("click", hideBoardOverlay);
+    els.overlayReviewBtn?.addEventListener("click", hideBoardOverlay);
+    els.overlayNewGameBtn?.addEventListener("click", () => {
+      hideBoardOverlay();
+      newGame();
+    });
   }
 
   populateEloSelect();
   bindEvents();
   initPwa();
+  initClocks();
   renderAll();
 })();

@@ -42,3 +42,14 @@ icons/                  App icons
 ```
 
 If a previously opened version appears stuck, reload the page once or clear the browser's site data so the updated service worker cache is replaced.
+
+## Windows version
+
+Two Windows deliverables are available one folder above this project:
+
+```text
+MascottChess-Windows-Portable.zip   Portable Windows package with a double-click launcher
+MascottChess-Electron-Source.zip    Electron source project for building an installer or .exe on Windows
+```
+
+For the portable version, extract the zip and double-click `Start Mascott Chess.cmd`.

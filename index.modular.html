@@ -35,6 +35,18 @@
               </select>
             </label>
             <label>
+              <span>Timer</span>
+              <select id="timeControlSelect">
+                <option value="0">Untimed</option>
+                <option value="60">1 min (Bullet)</option>
+                <option value="180">3 min (Blitz)</option>
+                <option value="300" selected>5 min (Blitz)</option>
+                <option value="600">10 min (Rapid)</option>
+                <option value="900">15 min (Rapid)</option>
+                <option value="1800">30 min (Classical)</option>
+              </select>
+            </label>
+            <label>
               <span>Play as</span>
               <select id="sideSelect">
                 <option value="w" selected>White</option>
@@ -52,7 +64,41 @@
             <p id="statusSubtext">Tap a piece to see every legal move.</p>
           </div>
 
-          <div id="board" class="board" aria-label="Interactive chess board"></div>
+          <div class="board-area">
+            <div class="player-bar top-player-bar">
+              <div class="player-info">
+                <span class="player-badge">💻</span>
+                <span id="topPlayerName" class="player-name">Computer (1200 ELO)</span>
+              </div>
+              <div id="topClock" class="clock-display" aria-label="Opponent timer">05:00</div>
+            </div>
+
+            <div class="board-wrapper">
+              <div id="board" class="board" aria-label="Interactive chess board"></div>
+
+              <!-- Board Status Overlay (Checkmate / Time Out / Draw) -->
+              <div id="boardOverlay" class="board-overlay" hidden>
+                <div class="board-overlay-card">
+                  <button id="closeBoardOverlayBtn" class="overlay-close-btn" type="button" aria-label="Close overlay">&times;</button>
+                  <div id="boardOverlayIcon" class="board-overlay-icon">♚</div>
+                  <h2 id="boardOverlayTitle" class="board-overlay-title">CHECKMATE</h2>
+                  <p id="boardOverlayMessage" class="board-overlay-message">White wins by checkmate.</p>
+                  <div class="board-overlay-actions">
+                    <button id="overlayNewGameBtn" class="primary-button" type="button">Play Again</button>
+                    <button id="overlayReviewBtn" class="ghost-button" type="button">Review Board</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="player-bar bottom-player-bar">
+              <div class="player-info">
+                <span class="player-badge">👤</span>
+                <span id="bottomPlayerName" class="player-name">You</span>
+              </div>
+              <div id="bottomClock" class="clock-display" aria-label="Your timer">05:00</div>
+            </div>
+          </div>
         </section>
 
         <aside class="side-panel" aria-label="Game information">
@@ -65,14 +111,6 @@
               <li>Pick a tight 50-point Elo step from 400 to 2400.</li>
               <li>All normal chess rules are included: check, castling, en passant, and promotion.</li>
             </ul>
-          </section>
-
-          <section class="info-card compact">
-            <div class="card-header">
-              <h2>Position</h2>
-              <button id="copyFenBtn" class="tiny-button" type="button">Copy FEN</button>
-            </div>
-            <p id="fenText" class="fen-text"></p>
           </section>
 
           <section class="info-card move-history-card">

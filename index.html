@@ -140,8 +140,9 @@ h2 {
 
 .controls {
   display: grid;
-  grid-template-columns: minmax(190px, 1fr) minmax(140px, 0.7fr) auto;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) auto;
   gap: 12px;
+  align-items: end;
   padding: 14px;
   border-radius: var(--radius);
   margin-bottom: 12px;
@@ -291,14 +292,100 @@ select:disabled {
   }
 }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+.board-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: var(--board-size);
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.player-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 14px rgba(2, 6, 23, 0.3);
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.player-badge {
+  font-size: 1.15rem;
+}
+
+.clock-display {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 5px 14px;
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--muted);
+  min-width: 82px;
+  text-align: center;
+  transition: all 0.2s ease;
+  letter-spacing: 0.04em;
+}
+
+.clock-display.untimed {
+  opacity: 0.55;
+  font-size: 0.9rem;
+}
+
+.clock-display.active {
+  background: #0f172a;
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+}
+
+.clock-display.warning {
+  border-color: var(--warn);
+  color: var(--warn);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+}
+
+.clock-display.danger {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: var(--danger);
+  color: #fca5a5;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.65);
+  animation: clockPulse 1s infinite alternate;
+}
+
+@keyframes clockPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+.board-wrapper {
+  position: relative;
   width: var(--board-size);
   height: var(--board-size);
   max-width: 100%;
   margin-inline: auto;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  height: 100%;
   border: clamp(5px, 1vw, 12px) solid rgba(2, 6, 23, 0.66);
   border-radius: clamp(18px, 3vw, 34px);
   overflow: hidden;
@@ -306,6 +393,97 @@ select:disabled {
     0 35px 70px rgba(2, 6, 23, 0.5),
     inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   touch-action: manipulation;
+}
+
+.board-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: clamp(18px, 3vw, 34px);
+  animation: overlayFadeIn 0.25s ease-out;
+  padding: 16px;
+}
+
+.board-overlay-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
+  border: 2px solid var(--accent);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.3);
+  border-radius: 22px;
+  padding: 24px 26px;
+  text-align: center;
+  max-width: 90%;
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.overlay-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s ease;
+}
+
+.overlay-close-btn:hover {
+  color: var(--text);
+}
+
+.board-overlay-icon {
+  font-size: 3.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 12px var(--accent));
+  margin-bottom: 2px;
+}
+
+.board-overlay-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 0;
+}
+
+.board-overlay-message {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.board-overlay-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.board-overlay-actions button {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .square {
@@ -366,6 +544,17 @@ select:disabled {
 
 .square.king-check {
   background: radial-gradient(circle, rgba(239, 68, 68, 0.85), rgba(185, 28, 28, 0.58) 48%, transparent 72%), var(--dark-square);
+}
+
+.square.king-checkmate {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.95), rgba(153, 27, 27, 0.88) 60%, rgba(127, 29, 29, 0.4) 88%), var(--dark-square) !important;
+  box-shadow: inset 0 0 15px #ef4444, 0 0 22px #ef4444;
+  animation: checkmatePulse 1.1s infinite alternate;
+}
+
+@keyframes checkmatePulse {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.35); }
 }
 
 .piece {
@@ -784,15 +973,272 @@ select:disabled {
   }
 }
 
-    </style>
+/* Pure beginner tutorial additions */
+.beginner-tutorial .tutorial-wide {
+  scroll-margin-top: 18px;
+}
+
+.beginner-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.beginner-hero::after {
+  content: "♟";
+  position: absolute;
+  right: clamp(12px, 4vw, 44px);
+  bottom: -36px;
+  color: rgba(56, 189, 248, 0.08);
+  font-size: clamp(8rem, 22vw, 15rem);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.beginner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.lesson-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  text-decoration: none;
+}
+
+.simple-rule-grid,
+.steps-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.simple-rule-grid > div,
+.steps-strip > div {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(2, 6, 23, 0.32);
+}
+
+.simple-rule-grid strong,
+.steps-strip strong {
+  display: block;
+  color: #e0f2fe;
+  margin-bottom: 6px;
+}
+
+.simple-rule-grid p,
+.steps-strip p {
+  margin: 0;
+}
+
+.steps-strip > div {
+  position: relative;
+  padding-left: 56px;
+}
+
+.steps-strip span {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  color: #082f49;
+  background: linear-gradient(135deg, #7dd3fc, #38bdf8);
+  font-weight: 900;
+}
+
+.beginner-list li {
+  margin-bottom: 4px;
+}
+
+.piece-lessons {
+  display: grid;
+  gap: 16px;
+}
+
+.piece-lesson {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 280px);
+  gap: clamp(16px, 3vw, 28px);
+  align-items: center;
+  scroll-margin-top: 18px;
+}
+
+.piece-title-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 16px;
+  color: #f8fafc;
+  background: rgba(14, 165, 233, 0.14);
+  font-family: "Segoe UI Symbol", serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.piece-lesson h2 {
+  display: inline-block;
+  margin-left: 10px;
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+  vertical-align: top;
+  line-height: 48px;
+}
+
+.piece-lesson p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.diagram-card {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.diagram-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: min(100%, 260px);
+  aspect-ratio: 1 / 1;
+  border: 6px solid rgba(2, 6, 23, 0.62);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 22px 50px rgba(2, 6, 23, 0.28);
+}
+
+.diagram-square {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+.diagram-square.light {
+  background: var(--light-square);
+}
+
+.diagram-square.dark {
+  background: var(--dark-square);
+}
+
+.diagram-square.move.light,
+.diagram-square.capture.light {
+  background: #fde68a;
+}
+
+.diagram-square.move.dark,
+.diagram-square.capture.dark {
+  background: #d6a64c;
+}
+
+.diagram-piece {
+  color: #172033;
+  font-family: "Segoe UI Symbol", serif;
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  line-height: 1;
+  text-shadow: 0 5px 10px rgba(2, 6, 23, 0.25);
+}
+
+.diagram-dot,
+.diagram-ring {
+  position: absolute;
+  pointer-events: none;
+}
+
+.diagram-dot {
+  width: 28%;
+  height: 28%;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.diagram-ring {
+  inset: 15%;
+  border: 4px solid rgba(15, 23, 42, 0.5);
+  border-radius: 999px;
+}
+
+.diagram-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 12px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.diagram-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-piece {
+  color: #f8fafc;
+  font-style: normal;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.legend-dot,
+.legend-ring {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+}
+
+.legend-dot {
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.72);
+}
+
+.legend-ring {
+  border: 2px solid rgba(148, 163, 184, 0.8);
+  border-radius: 999px;
+}
+
+.beginner-note {
+  margin-bottom: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  background: rgba(14, 165, 233, 0.12);
+}
+
+@media (max-width: 860px) {
+  .simple-rule-grid,
+  .steps-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .piece-lesson {
+    grid-template-columns: 1fr;
+  }
+
+  .diagram-board {
+    width: min(100%, 300px);
+  }
+}
+
+</style>
     <title>Mascott Chess PWA</title>
   </head>
   <body>
-    <noscript>
-      <div style="padding:16px;margin:16px;border-radius:12px;background:#7f1d1d;color:white;font-family:system-ui,sans-serif;">
-        JavaScript is required to play Mascott Chess. Please enable JavaScript or open the app in a browser that allows scripts.
-      </div>
-    </noscript>
     <div class="app-shell">
       <header class="topbar">
         <div>
@@ -816,6 +1262,18 @@ select:disabled {
               </select>
             </label>
             <label>
+              <span>Timer</span>
+              <select id="timeControlSelect">
+                <option value="0">Untimed</option>
+                <option value="60">1 min (Bullet)</option>
+                <option value="180">3 min (Blitz)</option>
+                <option value="300" selected>5 min (Blitz)</option>
+                <option value="600">10 min (Rapid)</option>
+                <option value="900">15 min (Rapid)</option>
+                <option value="1800">30 min (Classical)</option>
+              </select>
+            </label>
+            <label>
               <span>Play as</span>
               <select id="sideSelect">
                 <option value="w" selected>White</option>
@@ -833,7 +1291,41 @@ select:disabled {
             <p id="statusSubtext">Tap a piece to see every legal move.</p>
           </div>
 
-          <div id="board" class="board" aria-label="Interactive chess board"></div>
+          <div class="board-area">
+            <div class="player-bar top-player-bar">
+              <div class="player-info">
+                <span class="player-badge">💻</span>
+                <span id="topPlayerName" class="player-name">Computer (1200 ELO)</span>
+              </div>
+              <div id="topClock" class="clock-display" aria-label="Opponent timer">05:00</div>
+            </div>
+
+            <div class="board-wrapper">
+              <div id="board" class="board" aria-label="Interactive chess board"></div>
+
+              <!-- Board Status Overlay (Checkmate / Time Out / Draw) -->
+              <div id="boardOverlay" class="board-overlay" hidden>
+                <div class="board-overlay-card">
+                  <button id="closeBoardOverlayBtn" class="overlay-close-btn" type="button" aria-label="Close overlay">&times;</button>
+                  <div id="boardOverlayIcon" class="board-overlay-icon">♚</div>
+                  <h2 id="boardOverlayTitle" class="board-overlay-title">CHECKMATE</h2>
+                  <p id="boardOverlayMessage" class="board-overlay-message">White wins by checkmate.</p>
+                  <div class="board-overlay-actions">
+                    <button id="overlayNewGameBtn" class="primary-button" type="button">Play Again</button>
+                    <button id="overlayReviewBtn" class="ghost-button" type="button">Review Board</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="player-bar bottom-player-bar">
+              <div class="player-info">
+                <span class="player-badge">👤</span>
+                <span id="bottomPlayerName" class="player-name">You</span>
+              </div>
+              <div id="bottomClock" class="clock-display" aria-label="Your timer">05:00</div>
+            </div>
+          </div>
         </section>
 
         <aside class="side-panel" aria-label="Game information">
@@ -846,14 +1338,6 @@ select:disabled {
               <li>Pick a tight 50-point Elo step from 400 to 2400.</li>
               <li>All normal chess rules are included: check, castling, en passant, and promotion.</li>
             </ul>
-          </section>
-
-          <section class="info-card compact">
-            <div class="card-header">
-              <h2>Position</h2>
-              <button id="copyFenBtn" class="tiny-button" type="button">Copy FEN</button>
-            </div>
-            <p id="fenText" class="fen-text"></p>
           </section>
 
           <section class="info-card move-history-card">
@@ -878,14 +1362,6 @@ select:disabled {
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
     <script>
-
-window.addEventListener("error", function (event) {
-  var status = document.getElementById("statusText");
-  var sub = document.getElementById("statusSubtext");
-  if (status) status.textContent = "Mascott Chess hit a browser error.";
-  if (sub) sub.textContent = event && event.message ? event.message : "Please reload the page or open it through localhost.";
-});
-
 /* Chess engine and computer opponent for the PWA chess app.
    Board coordinates: row 0 = rank 8, row 7 = rank 1, col 0 = file a. */
 (function (root, factory) {
@@ -1679,8 +2155,7 @@ window.addEventListener("error", function (event) {
   };
 });
 
-    </script>
-    <script>
+
 /* UI layer for Mascott Chess PWA */
 (() => {
   "use strict";
@@ -1766,6 +2241,7 @@ window.addEventListener("error", function (event) {
   const els = {
     board: document.getElementById("board"),
     difficultySelect: document.getElementById("difficultySelect"),
+    timeControlSelect: document.getElementById("timeControlSelect"),
     sideSelect: document.getElementById("sideSelect"),
     newGameBtn: document.getElementById("newGameBtn"),
     statusText: document.getElementById("statusText"),
@@ -1780,6 +2256,19 @@ window.addEventListener("error", function (event) {
     toast: document.getElementById("toast"),
     installBtn: document.getElementById("installBtn"),
     offlineBadge: document.getElementById("offlineBadge"),
+
+    // Player Clock Bars & Board Overlay
+    topPlayerName: document.getElementById("topPlayerName"),
+    bottomPlayerName: document.getElementById("bottomPlayerName"),
+    topClock: document.getElementById("topClock"),
+    bottomClock: document.getElementById("bottomClock"),
+    boardOverlay: document.getElementById("boardOverlay"),
+    boardOverlayIcon: document.getElementById("boardOverlayIcon"),
+    boardOverlayTitle: document.getElementById("boardOverlayTitle"),
+    boardOverlayMessage: document.getElementById("boardOverlayMessage"),
+    closeBoardOverlayBtn: document.getElementById("closeBoardOverlayBtn"),
+    overlayNewGameBtn: document.getElementById("overlayNewGameBtn"),
+    overlayReviewBtn: document.getElementById("overlayReviewBtn"),
   };
 
   let state = E.createInitialState();
@@ -1794,6 +2283,14 @@ window.addEventListener("error", function (event) {
   let pendingPromotionMoves = [];
   let toastTimer = null;
   let deferredInstallPrompt = null;
+
+  // Timer state
+  let timeControlSeconds = 300;
+  let whiteTimeMs = 300000;
+  let blackTimeMs = 300000;
+  let timerInterval = null;
+  let lastTickTime = null;
+  let timerStarted = false;
 
   function colorText(color) {
     return color === "w" ? "White" : "Black";
@@ -1827,6 +2324,147 @@ window.addEventListener("error", function (event) {
         els.toast.hidden = true;
       }, 160);
     }, duration);
+  }
+
+  // --- Clock & Timer Functions ---
+  function initClocks() {
+    timeControlSeconds = els.timeControlSelect ? parseInt(els.timeControlSelect.value, 10) || 0 : 300;
+    whiteTimeMs = timeControlSeconds * 1000;
+    blackTimeMs = timeControlSeconds * 1000;
+    timerStarted = false;
+    stopTimer();
+    updateClockDisplays();
+  }
+
+  function startTimer() {
+    stopTimer();
+    if (timeControlSeconds <= 0 || gameOver) return;
+    lastTickTime = performance.now();
+    timerInterval = setInterval(tickTimer, 100);
+  }
+
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function tickTimer() {
+    if (gameOver || timeControlSeconds <= 0) {
+      stopTimer();
+      return;
+    }
+
+    const now = performance.now();
+    const delta = now - lastTickTime;
+    lastTickTime = now;
+
+    if (state.turn === "w") {
+      whiteTimeMs = Math.max(0, whiteTimeMs - delta);
+      if (whiteTimeMs === 0) {
+        handleTimeout("w");
+        return;
+      }
+    } else {
+      blackTimeMs = Math.max(0, blackTimeMs - delta);
+      if (blackTimeMs === 0) {
+        handleTimeout("b");
+        return;
+      }
+    }
+    updateClockDisplays();
+  }
+
+  function handleTimeout(flaggedColor) {
+    stopTimer();
+    gameOver = true;
+    const winner = E.opponent(flaggedColor);
+    const flaggedName = flaggedColor === playerColor ? "You" : "Computer";
+    const winnerName = winner === playerColor ? "You" : "Computer";
+    const winnerColorName = winner === "w" ? "White" : "Black";
+
+    renderBoard();
+    renderStatus();
+
+    showBoardOverlay({
+      icon: "⏱️",
+      title: "TIME OUT",
+      message: `${flaggedName} ran out of time! ${winnerColorName} (${winnerName}) wins on time.`,
+    });
+  }
+
+  function formatTime(ms) {
+    if (ms <= 0) return "0:00";
+    if (ms < 10000) {
+      const sec = Math.floor(ms / 1000);
+      const tenth = Math.floor((ms % 1000) / 100);
+      return `0:0${sec}.${tenth}`;
+    }
+    const totalSec = Math.floor(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  }
+
+  function updateClockDisplays() {
+    if (!els.topClock || !els.bottomClock) return;
+
+    const elo = Number.parseInt(normalizeEloLevel(difficulty), 10);
+
+    if (timeControlSeconds <= 0) {
+      els.topClock.textContent = "— : —";
+      els.bottomClock.textContent = "— : —";
+      els.topClock.className = "clock-display untimed";
+      els.bottomClock.className = "clock-display untimed";
+      if (els.topPlayerName) els.topPlayerName.textContent = `Computer (${elo} ELO)`;
+      if (els.bottomPlayerName) els.bottomPlayerName.textContent = "You";
+      return;
+    }
+
+    let topMs, bottomMs, topActive, bottomActive;
+    if (playerColor === "w") {
+      topMs = blackTimeMs;
+      bottomMs = whiteTimeMs;
+      topActive = state.turn === "b" && !gameOver;
+      bottomActive = state.turn === "w" && !gameOver;
+      if (els.topPlayerName) els.topPlayerName.textContent = `Computer (${elo} ELO)`;
+      if (els.bottomPlayerName) els.bottomPlayerName.textContent = "You";
+    } else {
+      topMs = whiteTimeMs;
+      bottomMs = blackTimeMs;
+      topActive = state.turn === "w" && !gameOver;
+      bottomActive = state.turn === "b" && !gameOver;
+      if (els.topPlayerName) els.topPlayerName.textContent = `Computer (${elo} ELO)`;
+      if (els.bottomPlayerName) els.bottomPlayerName.textContent = "You";
+    }
+
+    els.topClock.textContent = formatTime(topMs);
+    els.bottomClock.textContent = formatTime(bottomMs);
+
+    setClockClass(els.topClock, topMs, topActive);
+    setClockClass(els.bottomClock, bottomMs, bottomActive);
+  }
+
+  function setClockClass(element, ms, isActive) {
+    let cls = "clock-display";
+    if (isActive) cls += " active";
+    if (ms < 10000) cls += " danger";
+    else if (ms < 30000) cls += " warning";
+    element.className = cls;
+  }
+
+  // --- Board Overlay Functions ---
+  function showBoardOverlay({ icon, title, message }) {
+    if (!els.boardOverlay) return;
+    if (els.boardOverlayIcon) els.boardOverlayIcon.textContent = icon || "♚";
+    if (els.boardOverlayTitle) els.boardOverlayTitle.textContent = title || "GAME OVER";
+    if (els.boardOverlayMessage) els.boardOverlayMessage.textContent = message || "";
+    els.boardOverlay.hidden = false;
+  }
+
+  function hideBoardOverlay() {
+    if (els.boardOverlay) els.boardOverlay.hidden = true;
   }
 
   function clearSelection() {
@@ -1933,9 +2571,43 @@ window.addEventListener("error", function (event) {
 
     lastMove = { from: cloneSquare(move.from), to: cloneSquare(move.to) };
     clearSelection();
+
+    // Start timer on first move if applicable
+    if (timeControlSeconds > 0 && !timerStarted && !gameOver) {
+      timerStarted = true;
+      startTimer();
+    }
+
+    const status = E.gameStatus(state);
+    if (status.over) {
+      stopTimer();
+      gameOver = true;
+    }
+
     renderAll();
 
-    if (source === "player") {
+    if (status.over) {
+      if (status.reason === "checkmate") {
+        const isUserWinner = status.winner === playerColor;
+        showBoardOverlay({
+          icon: "♚",
+          title: "CHECKMATE",
+          message: isUserWinner ? "Victory! You checkmated the computer." : "The computer found checkmate.",
+        });
+      } else if (status.reason === "stalemate") {
+        showBoardOverlay({
+          icon: "🤝",
+          title: "STALEMATE",
+          message: "Game drawn by stalemate.",
+        });
+      } else {
+        showBoardOverlay({
+          icon: "🤝",
+          title: "DRAW",
+          message: "Game drawn by fifty-move rule.",
+        });
+      }
+    } else if (source === "player") {
       window.setTimeout(maybeComputerMove, 180);
     }
   }
@@ -1952,7 +2624,6 @@ window.addEventListener("error", function (event) {
     clearSelection();
     renderAll();
 
-    // Give the UI a beat to update before the synchronous search starts.
     window.setTimeout(() => {
       let move = null;
       const started = performance.now();
@@ -1977,7 +2648,8 @@ window.addEventListener("error", function (event) {
     renderBoard();
     renderStatus();
     renderHistory();
-    els.fenText.textContent = E.boardToFen(state);
+    updateClockDisplays();
+    if (els.fenText) els.fenText.textContent = E.boardToFen(state);
   }
 
   function renderBoard() {
@@ -1990,6 +2662,7 @@ window.addEventListener("error", function (event) {
 
     const whiteInCheck = E.isInCheck(state, "w");
     const blackInCheck = E.isInCheck(state, "b");
+    const status = E.gameStatus(state);
     const rows = playerColor === "w" ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
     const cols = playerColor === "w" ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
 
@@ -2007,6 +2680,7 @@ window.addEventListener("error", function (event) {
         const isSelected = selected && selected.r === r && selected.c === c;
         const isLast = lastMove && (isSameSquare(lastMove.from, { r, c }) || isSameSquare(lastMove.to, { r, c }));
         const checkedKing = piece && piece.type === "k" && ((piece.color === "w" && whiteInCheck) || (piece.color === "b" && blackInCheck));
+        const checkmatedKing = checkedKing && status.over && status.reason === "checkmate";
 
         button.type = "button";
         button.className = `square ${light ? "light" : "dark"}`;
@@ -2018,6 +2692,7 @@ window.addEventListener("error", function (event) {
         if (isCapture) button.classList.add("capture-target");
         if (isLast) button.classList.add("last-move");
         if (checkedKing) button.classList.add("king-check");
+        if (checkmatedKing) button.classList.add("king-checkmate");
         if (piece && piece.color === playerColor && state.turn === playerColor && !thinking && !gameOver) {
           button.classList.add("own-piece");
         }
@@ -2057,11 +2732,12 @@ window.addEventListener("error", function (event) {
 
   function renderStatus() {
     const status = E.gameStatus(state);
-    gameOver = status.over;
+    if (status.over) gameOver = true;
 
     els.thinkingDot.hidden = !thinking;
     els.newGameBtn.disabled = thinking;
     els.sideSelect.disabled = thinking;
+    if (els.timeControlSelect) els.timeControlSelect.disabled = thinking;
 
     let main = "";
     const levelText = formatLevel(difficulty);
@@ -2129,6 +2805,8 @@ window.addEventListener("error", function (event) {
     gameOver = false;
     pendingPromotionMoves = [];
     els.promotionModal.hidden = true;
+    hideBoardOverlay();
+    initClocks();
     renderAll();
     window.setTimeout(maybeComputerMove, 220);
   }
@@ -2198,8 +2876,16 @@ window.addEventListener("error", function (event) {
       difficulty = normalizeEloLevel(els.difficultySelect.value);
       els.difficultySelect.value = difficulty;
       renderStatus();
+      updateClockDisplays();
       showToast(`Computer level set to ${formatLevel(difficulty)}.`);
     });
+
+    if (els.timeControlSelect) {
+      els.timeControlSelect.addEventListener("change", () => {
+        newGame();
+        showToast("Timer updated.");
+      });
+    }
 
     els.sideSelect.addEventListener("change", () => {
       newGame();
@@ -2211,7 +2897,7 @@ window.addEventListener("error", function (event) {
       showToast("New game started.");
     });
 
-    els.copyFenBtn.addEventListener("click", copyFen);
+    if (els.copyFenBtn) els.copyFenBtn.addEventListener("click", copyFen);
     els.clearHistoryBtn.addEventListener("click", () => {
       moveHistory = [];
       renderHistory();
@@ -2226,14 +2912,22 @@ window.addEventListener("error", function (event) {
       hidePromotionPicker();
       if (move) executeMove(move, "player");
     });
+
+    els.closeBoardOverlayBtn?.addEventListener("click", hideBoardOverlay);
+    els.overlayReviewBtn?.addEventListener("click", hideBoardOverlay);
+    els.overlayNewGameBtn?.addEventListener("click", () => {
+      hideBoardOverlay();
+      newGame();
+    });
   }
 
   populateEloSelect();
   bindEvents();
   initPwa();
+  initClocks();
   renderAll();
 })();
 
-    </script>
+</script>
   </body>
 </html>
